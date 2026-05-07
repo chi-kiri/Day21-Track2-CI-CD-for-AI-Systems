@@ -9,6 +9,10 @@ on:
       - 'params.yaml'
   workflow_dispatch:
 
+env:
+  MLFLOW_TRACKING_URI: sqlite:///mlflow.db
+  MLFLOW_ARTIFACT_ROOT: ./mlartifacts
+
 jobs:
   test:
     name: Test
@@ -47,7 +51,8 @@ jobs:
       - name: Read metrics
         id: read_metrics
         run: |
-          python -c 'import json; print(f"accuracy={json.load(open(\"outputs/metrics.json\"))[\"accuracy\"]}")' >> $GITHUB_OUTPUT
+          ACC=$(python -c "import json; print(json.load(open('outputs/metrics.json'))['accuracy'])")
+          echo "accuracy=$ACC" >> $GITHUB_OUTPUT
       - name: Upload model to Cloud Storage
         run: |
           python - <<'EOF'
