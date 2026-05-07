@@ -25,7 +25,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run tests
-        run: pytest tests/ -v
+        run: |
+          rm -rf mlruns/
+          python -c "import mlflow; mlflow.set_tracking_uri('sqlite:///mlflow.db'); mlflow.set_experiment('Default')"
+          pytest tests/ -v
 
   train:
     name: Train
