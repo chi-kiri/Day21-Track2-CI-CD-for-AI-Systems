@@ -18,6 +18,10 @@ def train(
     """
     Huấn luyện mô hình và ghi nhận kết quả vào MLflow.
     """
+    # Thiết lập MLflow tracking URI
+    tracking_uri = os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db")
+    mlflow.set_tracking_uri(tracking_uri)
+    mlflow.set_experiment("wine-quality")
     # 1.5.1: Đọc dữ liệu
     df_train = pd.read_csv(data_path)
     df_eval = pd.read_csv(eval_path)
